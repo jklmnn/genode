@@ -23,6 +23,9 @@ SRC_CC        = main.cc \
                 ram_dataspace_factory.cc \
                 core_rpc_cap_alloc.cc \
                 io_mem_session_component.cc \
+                io_port_session_component.cc \
+                io_port_session_support.cc \
+                irq_session_component.cc \
                 signal_source_component.cc \
                 signal_transmitter_proxy.cc \
                 signal_receiver.cc \
@@ -58,13 +61,13 @@ vpath pd_session_support.cc       $(GEN_CORE_DIR)
 vpath capability_space.cc         $(GEN_CORE_DIR)
 vpath rpc_cap_factory_l4.cc       $(GEN_CORE_DIR)
 vpath ram_dataspace_factory.cc    $(GEN_CORE_DIR)
-vpath platform_services.cc        $(GEN_CORE_DIR)
 vpath signal_source_component.cc  $(GEN_CORE_DIR)
 vpath signal_transmitter_proxy.cc $(GEN_CORE_DIR)
 vpath signal_receiver.cc          $(GEN_CORE_DIR)
 vpath trace_session_component.cc  $(GEN_CORE_DIR)
 vpath core_rpc_cap_alloc.cc       $(GEN_CORE_DIR)
 vpath default_log.cc              $(GEN_CORE_DIR)
+vpath io_port_session_support.cc  $(GEN_CORE_DIR)/spec/x86
 vpath thread.cc                   $(BASE_DIR)/src/lib/base
 vpath thread_myself.cc            $(BASE_DIR)/src/lib/base
 vpath trace.cc                    $(BASE_DIR)/src/lib/base
