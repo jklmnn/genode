@@ -210,6 +210,7 @@ struct Acpica::Main
 #include "sb.h"
 #include "ec.h"
 #include "bridge.h"
+#include "i2c_hid.h"
 
 ACPI_STATUS init_pic_mode()
 {
@@ -350,6 +351,13 @@ void Acpica::Main::init_acpica(Wait_acpi_ready wait_acpi_ready,
 		Genode::error("AcpiGetDevices (PNP0C0D) failed, status=", status);
 		return;
 	}
+
+        /* I2C HID device */
+        status = AcpiGetDevices(ACPI_STRING("PNP0C50"), I2c_hid::detect, this, nullptr);
+        if(status != AE_OK) {
+            Genode::error("AcpiGetDevices (PNP0C50) failed, status=", status);
+            return;
+        }
 
 	if (act_as_acpi_drv.enabled) {
 		/* lookup PCI root bridge */

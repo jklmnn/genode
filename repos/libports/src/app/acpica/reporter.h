@@ -17,6 +17,7 @@ class Battery;
 class Ec;
 class Fixed;
 class Lid;
+class I2c_hid;
 
 class Acpica::Reportstate {
 
@@ -27,18 +28,21 @@ class Acpica::Reportstate {
 		Genode::Reporter _reporter_sb;
 		Genode::Reporter _reporter_ec;
 		Genode::Reporter _reporter_fix;
+                Genode::Reporter _reporter_i2c_hid;
 
 		bool _changed_lid   = false;
 		bool _changed_ac    = false;
 		bool _changed_sb    = false;
 		bool _changed_ec    = false;
 		bool _changed_fixed = false;
+                bool _changed_i2c_hid = false;
 
 		Genode::List<Callback<Battery> > _list_sb;
 		Genode::List<Callback<Ec> > _list_ec;
 		Genode::List<Callback<Ac> > _list_ac;
 		Callback<Fixed> * _fixed;
 		Callback<Lid> * _lid;
+                Genode::List<Callback<I2c_hid>> _list_i2c_hid;
 
 	public:
 
@@ -48,7 +52,8 @@ class Acpica::Reportstate {
 			_reporter_ac (env, "acpi_ac"),
 			_reporter_sb (env, "acpi_battery"),
 			_reporter_ec (env, "acpi_ec"),
-			_reporter_fix(env, "acpi_fixed")
+			_reporter_fix(env, "acpi_fixed"),
+                        _reporter_i2c_hid(env, "acpi_i2c_hid")
 		{ }
 
 		void add_notify(Acpica::Callback<Battery> * s) { _list_sb.insert(s); }
@@ -56,6 +61,7 @@ class Acpica::Reportstate {
 		void add_notify(Acpica::Callback<Lid> * l)     { _lid = l; }
 		void add_notify(Acpica::Callback<Ec> * e)      { _list_ec.insert(e); }
 		void add_notify(Acpica::Callback<Ac> * a)      { _list_ac.insert(a); }
+                void add_notify(Acpica::Callback<I2c_hid> * h) { _list_i2c_hid.insert(h); }
 
 		void enable() {
 			_reporter_ac.enabled(true);
@@ -63,6 +69,7 @@ class Acpica::Reportstate {
 			_reporter_sb.enabled(true);
 			_reporter_lid.enabled(true);
 			_reporter_fix.enabled(true);
+                        _reporter_i2c_hid.enabled(true);
 		}
 
 		void battery_event() { _changed_sb    = true; }
@@ -70,11 +77,13 @@ class Acpica::Reportstate {
 		void fixed_event()   { _changed_fixed = true; }
 		void lid_event()     { _changed_lid   = true; }
 		void ac_event()      { _changed_ac    = true; battery_event(); }
+                void i2c_hid_event() { _changed_i2c_hid = true; }
 
 		bool generate_report(bool force = false)
 		{
 			bool const changed = _changed_sb  || _changed_ec ||
-			                     _changed_fixed || _changed_lid || _changed_ac;
+			                     _changed_fixed || _changed_lid || _changed_ac ||
+                                             _changed_i2c_hid;
 
 			if (_changed_lid || force) {
 				_changed_lid = false;
@@ -115,6 +124,14 @@ class Acpica::Reportstate {
 						_fixed->generate(xml);
 					});
 			}
+
+                        if (_changed_i2c_hid || force) {
+                            _changed_i2c_hid = false;
+                            Genode::Reporter::Xml_generator xml(_reporter_i2c_hid, [&] () {
+                                    for(Callback<I2c_hid> *ih = _list_i2c_hid.first(); ih; ih = ih->next())
+                                            xml.node("i2c_hid", [&] {ih->generate(xml); });
+                            });
+                        }
 
 			return changed;
 		}
