@@ -9,15 +9,17 @@ if {
 	exit 0
 }
 
+
 set build_components {
 	core init
 	drivers/input
 	drivers/timer
-        drivers/vga_log
+        drivers/framebuffer/boot
 	server/acpi_input
 	server/dynamic_rom
 	server/input_merger
-	server/report_rom
+        server/report_rom
+        server/terminal_log
 	app/acpica
 	test/input
 }
@@ -54,6 +56,8 @@ build $build_components
 
 create_boot_directory
 
+import_from_depot genodelabs/pkg/terminal
+
 set config {
 	<config>
 		<parent-provides>
@@ -73,16 +77,42 @@ set config {
 		<start name="timer">
 			<resource name="RAM" quantum="2M"/>
 			<provides><service name="Timer"/></provides>
-		</start>
+                </start>
 
-                <start name="vga_log_drv">
-                    <resource name="RAM" quantum="2M"/>
-                    <provides><service name="LOG"/></provides>
+                <start name="fb_boot_drv">
+                    <resource name="RAM" quantum="16M"/>
+                    <provides>
+                        <service name="Framebuffer"/>
+                    </provides>
+                </start>
+
+                <start name="terminal">
+                    <resource name="RAM" quantum="4M"/>
+                    <provides>
+                        <service name="Terminal"/>
+                    </provides>
                     <route>
-                        <service name="Input"><child name="ps2_drv"/></service>
+                        <service name="ROM" label="config"> <parent label="terminal.config"/> </service>
+                        <service name="Input"><child name="dummy_input_drv"/></service>
+                        <service name="Framebuffer"><child name="fb_boot_drv"/></service>
                         <any-service><parent/><any-child/></any-service>
                     </route>
                 </start>
+
+                <start name="terminal_log">
+                    <resource name="RAM" quantum="4M"/>
+                    <provides>
+                        <service name="LOG"/>
+                    </provides>
+                </start>
+
+                <start name="dummy_input_drv">
+                    <resource name="RAM" quantum="1M"/>
+                    <provides>
+                        <service name="Input"/>
+                    </provides>
+                </start>
+
 }
 
 append_if [expr !$use_acpica_as_acpi_drv] config {
@@ -90,7 +120,8 @@ append_if [expr !$use_acpica_as_acpi_drv] config {
 			<resource name="RAM" quantum="5M"/>
 			<config ld_verbose="yes" reset="no" poweroff="no" report="yes" acpi_ready="yes">
 			</config>
-			<route>
+                        <route>
+                                <service name="LOG"><child name="terminal_log"/></service>
 				<service name="ROM" label="system"> <child name="dynamic_rom"/> </service>
 				<service name="Report">  <child name="acpi_state"/> </service>
 				<any-service> <parent/> <any-child/> </any-service>
@@ -173,7 +204,7 @@ append config {
                     <resource name="RAM" quantum="2M"/>
                     <provides><service name="Input"/></provides>
                     <route>
-                        <service name="LOG"><child name="vga_log_drv"/></service>
+                        <service name="LOG"><child name="terminal_log"/></service>
                         <service name="ROM" label="i2c_hid"><child name="acpi_state"/></service>
                         <any-service><parent/><any-child/></any-service>
                     </route>
@@ -226,9 +257,12 @@ install_config $config
 set boot_modules {
 	core init
 	ld.lib.so
-        ada.lib.so
+        vfs.lib.so
 	timer
-	ps2_drv
+        ps2_drv
+        dummy_input_drv
+        terminal_log
+        fb_boot_drv
         i2c_hid_drv
 	input_merger
 	report_rom
@@ -236,7 +270,6 @@ set boot_modules {
 	acpica
 	acpi_input
 	test-input
-        vga_log_drv
 }
 
 append_platform_drv_boot_modules
