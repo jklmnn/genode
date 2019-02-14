@@ -22,6 +22,7 @@ set build_components {
         server/terminal_log
 	app/acpica
 	test/input
+        app/log_core
 }
 
 set use_acpica_as_acpi_drv 0
@@ -112,7 +113,30 @@ set config {
                         <service name="Input"/>
                     </provides>
                 </start>
+<!--
+	<start name="log_core">
+		<resource name="RAM" quantum="1M"/>
+		<config period_ms="2000"/>
+		<route>
+			<service name="ROM" label="log"> <parent label="core_log"/> </service>
+			<service name="Timer"> <child name="timer"/> </service>
+			<service name="LOG" label="log"> <child name="terminal_log" label="core"/> </service>
+			<any-service> <parent/> </any-service>
+		</route>
+	</start>
 
+	<start name="log_kernel">
+		<binary name="log_core"/>
+		<resource name="RAM" quantum="1M"/>
+		<config period_ms="2000"/>
+		<route>
+			<service name="ROM" label="log"> <parent label="kernel_log"/> </service>
+			<service name="Timer"> <child name="timer"/> </service>
+			<service name="LOG" label="log"> <child name="terminal_log" label="kernel"/> </service>
+			<any-service> <parent/> </any-service>
+		</route>
+	</start>
+        -->
 }
 
 append_if [expr !$use_acpica_as_acpi_drv] config {
@@ -257,7 +281,6 @@ install_config $config
 set boot_modules {
 	core init
 	ld.lib.so
-        vfs.lib.so
 	timer
         ps2_drv
         dummy_input_drv
@@ -270,6 +293,7 @@ set boot_modules {
 	acpica
 	acpi_input
 	test-input
+        log_core
 }
 
 append_platform_drv_boot_modules
