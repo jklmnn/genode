@@ -3,6 +3,7 @@ include $(REP_DIR)/lib/import/import-ada_interface.mk
 
 SRC_ADS += cxx.ads \
 	   cxx-block.ads \
+	   cxx-block-client.ads \
 	   cxx-genode.ads \
 	   internals.ads \
 	   internals-block.ads \
@@ -10,7 +11,9 @@ SRC_ADS += cxx.ads \
 
 SRC_ADB += block-client.adb
 
-SRC_CC += block_class.cc
+SRC_CC += block_client.cc block_server.cc
+
+CC_CXX_OPT += -Wno-attributes
 
 LIBS = base spark
 
