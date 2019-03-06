@@ -7,9 +7,10 @@ SRC_ADS += cxx.ads \
 	   cxx-genode.ads \
 	   internals.ads \
 	   internals-block.ads \
-	   block.ads
+	   cai.ads \
+	   cai-block.ads
 
-SRC_ADB += block-client.adb
+SRC_ADB += cai-block-client.adb
 
 SRC_CC += block_client.cc block_server.cc
 
