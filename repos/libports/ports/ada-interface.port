@@ -3,5 +3,5 @@ VERSION   := 0
 DOWNLOADS := ada-interface.git
 
 URL(ada-interface) := https://github.com/Componolit/ada-interface.git
-REV(ada-interface) := 6bb37674758ad4c5c75b99078dca574e2778a3e2
+REV(ada-interface) := 6cc88b5b34c56756d47cdbb516364b65d4685b61
 DIR(ada-interface) := ada-interface

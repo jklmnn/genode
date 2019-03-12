@@ -5,16 +5,20 @@ SRC_ADS += cxx.ads \
 	   cxx-block.ads \
 	   cxx-block-client.ads \
 	   cxx-genode.ads \
-	   internals.ads \
-	   internals-block.ads \
+	   cai-internal.ads \
+	   cai-internal-block.ads \
 	   cai.ads \
 	   cai-block.ads
 
-SRC_ADB += cai-block-client.adb
+SRC_ADB += cxx-block-dispatcher.adb \
+	   cxx-block-server.adb \
+	   cai-block-client.adb \
+	   cai-block-server.adb \
+	   cai-block-dispatcher.adb
 
-SRC_CC += block_client.cc block_server.cc
-
-CC_CXX_OPT += -Wno-attributes
+SRC_CC += block_client.cc \
+	  block_dispatcher.cc \
+	  block_server.cc
 
 LIBS = base spark
 
