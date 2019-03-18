@@ -5,8 +5,11 @@ SRC_ADS += cxx.ads \
 	   cxx-block.ads \
 	   cxx-block-client.ads \
 	   cxx-genode.ads \
+	   cxx-log.ads \
+	   cxx-log-client.ads \
 	   cai-internal.ads \
 	   cai-internal-block.ads \
+	   cai-internal-log.ads \
 	   cai.ads \
 	   cai-block.ads
 
