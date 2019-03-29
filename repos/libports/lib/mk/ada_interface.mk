@@ -18,6 +18,7 @@ SRC_ADB += cxx-block-dispatcher.adb \
 	   cai-block-client.adb \
 	   cai-block-server.adb \
 	   cai-block-dispatcher.adb \
+	   cai-block-util.adb \
 	   cai-log.adb \
 	   cai-log-client.adb
 
