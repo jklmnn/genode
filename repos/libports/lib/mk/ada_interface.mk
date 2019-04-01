@@ -1,6 +1,8 @@
 
 include $(REP_DIR)/lib/import/import-ada_interface.mk
 
+CC_CXX_OPT += -Wno-attributes
+
 SRC_ADS += cxx.ads \
 	   cxx-block.ads \
 	   cxx-block-client.ads \
