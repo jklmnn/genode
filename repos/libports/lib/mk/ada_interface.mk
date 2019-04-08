@@ -6,6 +6,7 @@ CC_CXX_OPT += -Wno-attributes
 SRC_ADS += cxx.ads \
 	   cxx-block.ads \
 	   cxx-block-client.ads \
+	   cxx-block-dispatcher.ads \
 	   cxx-genode.ads \
 	   cxx-log.ads \
 	   cxx-log-client.ads \
@@ -13,10 +14,11 @@ SRC_ADS += cxx.ads \
 	   cai-internal-block.ads \
 	   cai-internal-log.ads \
 	   cai.ads \
+	   cai-types.ads \
+	   cai-internal-types.ads \
 	   cai-block.ads
 
-SRC_ADB += cxx-block-dispatcher.adb \
-	   cxx-block-server.adb \
+SRC_ADB += cxx-block-server.adb \
 	   cai-block-client.adb \
 	   cai-block-server.adb \
 	   cai-block-dispatcher.adb \
