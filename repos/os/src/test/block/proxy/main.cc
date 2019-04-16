@@ -52,10 +52,35 @@ struct Root : Genode::Rpc_object<Genode::Typed_root<Block::Session>>
     Genode::Constructible<Block_session_component> _block_session;
     Genode::Signal_handler<Root> _req_handler;
     Genode::Constructible<Block::Connection> _block_connection;
+    Genode::size_t _block_size;
+
+    Block::Request _req;
+    bool _set;
 
     void handler()
     {
         Genode::log(__func__);
+        _block_session->with_requests([&] (Block::Request r){
+            _req = r;
+            _set = true;
+            Block::Packet_descriptor packet = Block::Packet_descriptor(
+                    _block_connection->tx()->alloc_packet(r.count * _block_size, 0),
+                    r.operation == Block::Request::Operation::READ ? Block::Packet_descriptor::READ : Block::Packet_descriptor::WRITE,
+                    r.block_number,
+                    r.count);
+            _block_connection->tx()->submit_packet(packet);
+            return Block_session_component::Response::RETRY;
+        });
+        if(_set){
+            _block_session->try_acknowledge([&] (Block_session_component::Ack &ack){
+                ack.submit(_req);
+                _set = false;
+            });
+            _block_session->with_requests([&] (Block::Request){
+                return Block_session_component::Response::ACCEPTED;
+            });
+        }
+        _block_session->wakeup_client();
     }
 
     Root(Genode::Env &env) :
@@ -65,7 +90,10 @@ struct Root : Genode::Rpc_object<Genode::Typed_root<Block::Session>>
         _block_ds(),
         _block_session(),
         _req_handler(_env.ep(), *this, &Root::handler),
-        _block_connection()
+        _block_connection(),
+        _block_size(0),
+        _req(),
+        _set(false)
     { }
 
     Genode::Capability<Genode::Session> session(Root::Session_args const &args, Genode::Affinity const &) override
@@ -80,11 +108,10 @@ struct Root : Genode::Rpc_object<Genode::Typed_root<Block::Session>>
 
         _block_connection.construct(_env, &_alloc, 128 * 1024, "");
         Block::sector_t block_count;
-        Genode::size_t block_size;
         Block::Session::Operations ops = Block::Session::Operations();
-        _block_connection->info(&block_count, &block_size, &ops);
+        _block_connection->info(&block_count, &_block_size, &ops);
         _block_ds.construct(_env.ram(), _env.rm(), ds_size);
-        _block_session.construct(_env.rm(), _block_ds->cap(), _env.ep(), _req_handler, *_block_connection, block_size);
+        _block_session.construct(_env.rm(), _block_ds->cap(), _env.ep(), _req_handler, *_block_connection, _block_size);
 
         return _block_session->cap();
     }
