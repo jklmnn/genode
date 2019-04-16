@@ -84,7 +84,7 @@ class Test : Genode::Interface
 			       (1 << Block::Packet_descriptor::PACKET_ALIGNMENT) - 1;
 		}
 
-		void _ack_avail()       { ack_avail();     }
+		void _ack_avail()       { Genode::log(__func__); ack_avail();     }
 		void _ready_to_submit() { _handle = false; }
 		void _timeout()         { throw Timeout(); }
 

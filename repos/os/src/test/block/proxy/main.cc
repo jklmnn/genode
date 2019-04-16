@@ -50,16 +50,42 @@ struct Root : Genode::Rpc_object<Genode::Typed_root<Block::Session>>
     Genode::Allocator_avl _alloc;
     Genode::Constructible<Genode::Attached_ram_dataspace> _block_ds;
     Genode::Constructible<Block_session_component> _block_session;
-    Genode::Signal_handler<Root> _req_handler;
+    Genode::Signal_handler<Root> _req_handler_client;
+    Genode::Signal_handler<Root> _req_handler_server;
     Genode::Constructible<Block::Connection> _block_connection;
     Genode::size_t _block_size;
 
     Block::Request _req;
     bool _set;
 
+    void client_handler(){
+        handler();
+    }
+
+    void server_handler(){
+        handler();
+        _block_session->wakeup_client();
+    }
+
     void handler()
     {
-        Genode::log(__func__);
+        Genode::log(__func__, " ", _set);
+        /*
+         * Block 1
+         * This code is called in the call to handler AFTER receiving the request
+         *
+        if(_set){
+            _block_session->try_acknowledge([&] (Block_session_component::Ack &ack){
+                ack.submit(_req);
+                _set = false;
+            });
+            _block_session->with_requests([&] (Block::Request){
+                return Block_session_component::Response::ACCEPTED;
+            });
+        }
+        *
+         * End Block 1
+         */
         _block_session->with_requests([&] (Block::Request r){
             _req = r;
             _set = true;
@@ -71,6 +97,11 @@ struct Root : Genode::Rpc_object<Genode::Typed_root<Block::Session>>
             _block_connection->tx()->submit_packet(packet);
             return Block_session_component::Response::RETRY;
         });
+        /*
+         * Block 2
+         * This code is called in the SAME call the handler received the request
+         *
+         */
         if(_set){
             _block_session->try_acknowledge([&] (Block_session_component::Ack &ack){
                 ack.submit(_req);
@@ -80,7 +111,9 @@ struct Root : Genode::Rpc_object<Genode::Typed_root<Block::Session>>
                 return Block_session_component::Response::ACCEPTED;
             });
         }
-        _block_session->wakeup_client();
+        /*
+         * End Block 2
+         */
     }
 
     Root(Genode::Env &env) :
@@ -89,7 +122,8 @@ struct Root : Genode::Rpc_object<Genode::Typed_root<Block::Session>>
         _alloc(&_heap),
         _block_ds(),
         _block_session(),
-        _req_handler(_env.ep(), *this, &Root::handler),
+        _req_handler_client(_env.ep(), *this, &Root::client_handler),
+        _req_handler_server(_env.ep(), *this, &Root::server_handler),
         _block_connection(),
         _block_size(0),
         _req(),
@@ -106,12 +140,14 @@ struct Root : Genode::Rpc_object<Genode::Typed_root<Block::Session>>
             throw Genode::Insufficient_ram_quota();
         }
 
-        _block_connection.construct(_env, &_alloc, 128 * 1024, "");
+        _block_connection.construct(_env, &_alloc, ds_size, "");
+        _block_connection->tx_channel()->sigh_ack_avail(_req_handler_client);
+        _block_connection->tx_channel()->sigh_ready_to_submit(_req_handler_client);
         Block::sector_t block_count;
         Block::Session::Operations ops = Block::Session::Operations();
         _block_connection->info(&block_count, &_block_size, &ops);
         _block_ds.construct(_env.ram(), _env.rm(), ds_size);
-        _block_session.construct(_env.rm(), _block_ds->cap(), _env.ep(), _req_handler, *_block_connection, _block_size);
+        _block_session.construct(_env.rm(), _block_ds->cap(), _env.ep(), _req_handler_server, *_block_connection, _block_size);
 
         return _block_session->cap();
     }
