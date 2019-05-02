@@ -847,8 +847,11 @@ class Platform::Root : public Genode::Root_component<Session_component>
 			using namespace Genode;
 
 			Xml_node xml_acpi(acpi_rom);
-			if (!xml_acpi.has_type("acpi"))
+                        log(xml_acpi);
+			if (!xml_acpi.has_type("acpi")){
+                                error(__func__, ":", __LINE__);
 				throw 1;
+                        }
 
 			xml_acpi.for_each_sub_node("bdf", [&] (Xml_node &node) {
 
@@ -878,8 +881,10 @@ class Platform::Root : public Genode::Root_component<Session_component>
 				_pci_confspace.construct(env, base, memory_size);
 			});
 
-			if (!_pci_confspace.constructed())
+			if (!_pci_confspace.constructed()){
+                                error(__func__, ":", __LINE__);
 				throw 2;
+                        }
 
 			Config_access config_access(*_pci_confspace);
 
@@ -917,24 +922,30 @@ class Platform::Root : public Genode::Root_component<Session_component>
 						mem_start = node.attribute_value("start", (uint64_t)0),
 						mem_end   = node.attribute_value("end",   (uint64_t)0);
 
-					if (node.num_sub_nodes() == 0)
+					if (node.num_sub_nodes() == 0){
+                                                error(__func__, ":", __LINE__);
 						throw 3;
+                                        }
 
 					Rmrr * rmrr = new (_heap) Rmrr(mem_start, mem_end);
 					Rmrr::list()->insert(rmrr);
 
 					for (unsigned s = 0; s < node.num_sub_nodes(); s++) {
 						Xml_node scope = node.sub_node(s);
-						if (!scope.num_sub_nodes() || !scope.has_type("scope"))
+						if (!scope.num_sub_nodes() || !scope.has_type("scope")){
+                                                        error(__func__, ":", __LINE__);
 							throw 4;
+                                                }
 
 						unsigned bus = 0, dev = 0, func = 0;
 						scope.attribute("bus_start").value(bus);
 
 						for (unsigned p = 0; p < scope.num_sub_nodes(); p++) {
 							Xml_node path = scope.sub_node(p);
-							if (!path.has_type("path"))
+							if (!path.has_type("path")){
+                                                            error(__func__, ":", __LINE__);
 								throw 5;
+                                                        }
 
 							path.attribute("dev") .value(dev);
 							path.attribute("func").value(func);
