@@ -23,6 +23,7 @@ __gnat_finalize_library_objects D 8
 __gnat_initialize T
 __gnat_last_chance_handler T
 __gnat_mulv64 T
+__gnat_personality_v0 T
 __gnat_raise_exception T
 __gnat_rcheck_CE_Access_Check T
 __gnat_rcheck_CE_Discriminant_Check T
