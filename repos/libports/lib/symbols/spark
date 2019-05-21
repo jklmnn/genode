@@ -15,6 +15,7 @@ __gl_time_slice_val D 4
 __gl_unreserve_all_interrupts B 4
 __gl_wc_encoding D 1
 __gnat_mulv64 T
+__gnat_personality_v0 T
 __gnat_raise_exception T
 __gnat_rcheck_CE_Access_Check T
 __gnat_rcheck_CE_Discriminant_Check T
