@@ -71,34 +71,8 @@ ada__exceptions__null_exception_id R 8
 ada__exceptions__raise_exception T
 ada__exceptions__reraise_occurrence_no_defer T
 ada__exceptions__save_occurrence T
-ada_exceptions_E D 2
-ada_exceptions__exception_typeA R 76
-ada_exceptions__exception_typeN R 78
-ada_exceptions__exception_typeRP T
-ada_exceptions__exception_typeS R 820
 allocate_secondary_stack T
 constraint_error D 40
-gnat_E D 2
-gnat__io_E D 2
-gnat__io__current_out D 1
-gnat__io__file_typeN R 4
-gnat__io__file_typeS R 16
-gnat__io__get T
-gnat__io__get__2 T
-gnat__io__get_line T
-gnat__io__new_line T
-gnat__io__new_line__2 T
-gnat__io__put T
-gnat__io__put__2 T
-gnat__io__put__3 T
-gnat__io__put__4 T
-gnat__io__put__5 T
-gnat__io__put__6 T
-gnat__io__put_line T
-gnat__io__put_line__2 T
-gnat__io__set_output T
-gnat__io__standard_error T
-gnat__io__standard_output T
 interfaces_E D 2
 interfaces__c_E D 2
 interfaces__c__char16_arrayIP T
@@ -114,42 +88,45 @@ interfaces__c__wide_nul R 4
 log_debug T
 log_error T
 log_warning T
-platform_E D 2
-platform__log_debug T
-platform__log_debug_private T
-platform__log_error T
-platform__log_error_private T
-platform__log_warning T
-platform__log_warning_private T
-platform__raise_ada_exception T
-put_char T
-put_char_stderr T
-put_int T
-put_int_stderr T
 raise_ada_exception T
-ss_utils_E D 2
-ss_utils__TregistryBIP T
-ss_utils___elabs T
-ss_utils__allocate_stack T
-ss_utils__c_alloc T
-ss_utils__get_mark T
-ss_utils__invalid_thread R 8
-ss_utils__markIP T
-ss_utils__null_registry B 3072
-ss_utils__registry_entryIP T
-ss_utils__s_allocate T
-ss_utils__s_mark T
-ss_utils__s_release T
-ss_utils__secondary_stack_size R 8
-ss_utils__set_mark T
-string_utils_E D 2
-string_utils__convert_to_ada T
-string_utils__get_char T
-string_utils__incr T
-string_utils__length T
-string_utils__null_pointer R 8
-string_utils__to_address T
-string_utils__to_pointer T
+runtime_lib__debug_E D 2
+runtime_lib__debug__log_debug T
+runtime_lib__debug__log_debug_private T
+runtime_lib__debug__log_error T
+runtime_lib__debug__log_error_private T
+runtime_lib__debug__log_warning T
+runtime_lib__debug__log_warning_private T
+runtime_lib__exceptions_E D 2
+runtime_lib__exceptions__exception_typeA R 76
+runtime_lib__exceptions__exception_typeN R 78
+runtime_lib__exceptions__exception_typeRP T
+runtime_lib__exceptions__exception_typeS R 820
+runtime_lib__platform_E D 2
+runtime_lib__platform__raise_ada_exception T
+runtime_lib__secondary_stack_E D 2
+runtime_lib__secondary_stack__TregistryBIP T
+runtime_lib__secondary_stack___elabs T
+runtime_lib__secondary_stack__allocate_stack T
+runtime_lib__secondary_stack__c_alloc T
+runtime_lib__secondary_stack__get_mark T
+runtime_lib__secondary_stack__invalid_thread R 8
+runtime_lib__secondary_stack__markIP T
+runtime_lib__secondary_stack__null_registry B 3072
+runtime_lib__secondary_stack__registry_entryIP T
+runtime_lib__secondary_stack__s_allocate T
+runtime_lib__secondary_stack__s_mark T
+runtime_lib__secondary_stack__s_release T
+runtime_lib__secondary_stack__secondary_stack_size R 8
+runtime_lib__secondary_stack__set_mark T
+runtime_lib__strings_E D 2
+runtime_lib__strings__convert_to_ada T
+runtime_lib__strings__get_char T
+runtime_lib__strings__image T
+runtime_lib__strings__incr T
+runtime_lib__strings__length T
+runtime_lib__strings__null_pointer R 8
+runtime_lib__strings__to_address T
+runtime_lib__strings__to_pointer T
 system__aamp R 1
 system__always_compatible_rep R 1
 system__arith_64__add_with_ovflo_check T
