@@ -19,15 +19,16 @@ SRC_CC += genode.cc
 SRC_C += init.c
 
 # Ada packages that implement runtime functionality
-SRC_ADS += runtime_lib.ads \
-	   runtime_lib-exceptions.ads
-SRC_ADB += runtime_lib-secondary_stack.adb \
-	   runtime_lib-strings.adb \
-	   runtime_lib-debug.adb \
-	   runtime_lib-platform.adb \
+SRC_ADS += componolit.ads \
+	   componolit-runtime.ads \
+	   componolit-runtime-exceptions.ads
+SRC_ADB += componolit-runtime-secondary_stack.adb \
+	   componolit-runtime-strings.adb \
+	   componolit-runtime-debug.adb \
+	   componolit-runtime-platform.adb \
 	   s-init.adb
 
-vpath %.cc  $(ADA_RUNTIME_PLATFORM_DIR)
+vpath genode.cc  $(ADA_RUNTIME_PLATFORM_DIR)/genode
 
 vpath s-soflin.ads $(ADA_RUNTIME_DIR)
 vpath a-except.ads $(ADA_RUNTIME_DIR)
@@ -42,7 +43,7 @@ vpath i-c.adb $(ADA_RUNTIME_DIR)
 vpath %.ads $(ADA_RTS_SOURCE)
 vpath %.adb $(ADA_RTS_SOURCE)
 
-vpath runtime_lib% $(ADA_RUNTIME_LIB_DIR)
+vpath componolit% $(ADA_RUNTIME_LIB_DIR)
 vpath init.c $(ADA_RUNTIME_LIB_DIR)
 vpath s-init.adb $(ADA_RUNTIME_COMMON_DIR)
 
