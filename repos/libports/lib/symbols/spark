@@ -15,7 +15,7 @@ __gl_time_slice_val D 4
 __gl_unreserve_all_interrupts B 4
 __gl_wc_encoding D 1
 __gnat_binder_ss_count B 4
-__gnat_default_ss_pool B 4
+__gnat_default_ss_pool B 8
 __gnat_default_ss_size B 4
 __gnat_finalize T
 __gnat_finalize_library_objects D 8
@@ -167,6 +167,7 @@ system__parameters__c_malloc_linkname R 16
 system__parameters__runtime_default_sec_stack_size R 4
 system__preallocated_stacks R 1
 system__secondary_stack_E D 2
+system__secondary_stack___elabb T
 system__secondary_stack___elabs T
 system__secondary_stack__mark_idIP T
 system__secondary_stack__memoryIP T
