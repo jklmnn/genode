@@ -135,7 +135,7 @@ proc run_power_on { } {
 			exit -4
 		} } } }
 
-		append qemu_args " -machine q35 "
+		append qemu_args " "
 	}
 
 	# on ARM, we supply the boot image as kernel
