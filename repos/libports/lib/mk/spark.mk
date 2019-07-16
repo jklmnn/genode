@@ -29,13 +29,17 @@ SRC_ADB += componolit-runtime-strings.adb \
 
 vpath genode.cc  $(ADA_RUNTIME_PLATFORM_DIR)/genode
 
+vpath system.ads   $(ADA_RUNTIME_DIR)
 vpath s-soflin.ads $(ADA_RUNTIME_DIR)
+vpath s-unstyp.ads $(ADA_RUNTIME_DIR)
 vpath a-except.ads $(ADA_RUNTIME_DIR)
 
 vpath s-secsta.adb $(ADA_RUNTIME_DIR)
 vpath s-soflin.adb $(ADA_RUNTIME_DIR)
 vpath s-stalib.adb $(ADA_RUNTIME_DIR)
 vpath s-parame.adb $(ADA_RUNTIME_DIR)
+vpath s-arit64.adb $(ADA_RUNTIME_DIR)
+vpath s-stoele.adb $(ADA_RUNTIME_DIR)
 vpath a-except.adb $(ADA_RUNTIME_DIR)
 vpath i-c.adb $(ADA_RUNTIME_DIR)
 
