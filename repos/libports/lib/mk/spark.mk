@@ -22,8 +22,7 @@ SRC_C += init.c
 SRC_ADS += componolit.ads \
 	   componolit-runtime.ads \
 	   componolit-runtime-exceptions.ads
-SRC_ADB += componolit-runtime-secondary_stack.adb \
-	   componolit-runtime-strings.adb \
+SRC_ADB += componolit-runtime-strings.adb \
 	   componolit-runtime-debug.adb \
 	   componolit-runtime-platform.adb \
 	   s-init.adb
