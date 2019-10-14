@@ -1334,6 +1334,14 @@ namespace {
 						errno = 0;
 					break;
 				}
+
+				/* try again */
+				bool const retry = (errno == EINTR
+				                 || errno == EAGAIN
+				                 || errno == EWOULDBLOCK);
+				if (errno && retry)
+					continue;
+
 				return -1;
 			}
 
