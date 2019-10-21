@@ -165,7 +165,7 @@ class Genode::Expanding_reporter
 
 		Constructible<Reporter> _reporter { };
 
-		size_t _buffer_size = 4096;
+		size_t _buffer_size;
 
 		void _construct()
 		{
@@ -181,8 +181,10 @@ class Genode::Expanding_reporter
 
 	public:
 
-		Expanding_reporter(Env &env, Node_type const &type, Label const &label)
-		: _env(env), _type(type), _label(label) { _construct(); }
+		Expanding_reporter(Env &env, Node_type const &type, Label const &label,
+		                   size_t const initial_buffer_size = 4096)
+		: _env(env), _type(type), _label(label), _buffer_size(initial_buffer_size)
+		{ _construct(); }
 
 		template <typename FN>
 		void generate(FN const &fn)
