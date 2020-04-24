@@ -3,7 +3,7 @@ VERSION   := 0
 DOWNLOADS := ada-runtime.git ada-runtime-alis.git
 
 URL(ada-runtime) := https://github.com/Componolit/ada-runtime.git
-REV(ada-runtime) := e7b80017f30a9fac0422f3e4b3d092895916e171
+REV(ada-runtime) := 84c80373fb3e874e74f7664e18596ff78f8d524b
 DIR(ada-runtime) := ada-runtime
 
 URL(ada-runtime-alis) := https://github.com/Componolit/ada-runtime-alis.git
